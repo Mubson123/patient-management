@@ -1,0 +1,17 @@
+### POST request to create new patient
+POST http://localhost:4000/patients
+Content-Type: application/json
+
+{
+  "gender": "FEMALE",
+  "firstname": "Max",
+  "lastname": "Jackson",
+  "birthDate": "1989-11-03",
+  "phone": "+49 911 675342",
+  "email": "jackson.max@example.com",
+  "street": "Dominion Strasse 4",
+  "zipCode": "90874",
+  "city": "Nuremberg"
+}
+
+###
