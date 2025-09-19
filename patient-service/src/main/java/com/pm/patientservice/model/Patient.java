@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -19,15 +21,20 @@ public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    private LocalDateTime registrationDate;
+    private LocalDateTime lastUpdateDate;
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     @NotNull
     private String firstname;
     @NotNull
     private String lastname;
-    @Embedded
-    private Address address;
+    @NotNull
+    private LocalDate birthDate;
+    private String phone;
     @Email
     private String email;
-    private String phone;
+    @Embedded
+    private Address address;
 }
