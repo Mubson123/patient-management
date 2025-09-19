@@ -8,6 +8,7 @@ import com.pm.patientservice.repository.PatientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -25,6 +26,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
-        return null;
+        Patient patient = patientMapper.toEntity(patientRequestDTO);
+        //Only one registration on the first time
+        patient.setRegistrationDate(LocalDateTime.now());
+        patientRepository.save(patient);
+        return patientMapper.toDTO(patient);
     }
 }
