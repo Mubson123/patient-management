@@ -15,9 +15,11 @@ import lombok.Setter;
 public class PatientRequestDTO {
     @NotBlank(message = "You should provide gender")
     private String gender;
-    @Size(max = 100, message = "Firstname is required")
+    @NotBlank(message = "Firstname is required")
+    @Size(max = 100)
     private String firstname;
-    @Size(max = 100, message = "Lastname is required")
+    @NotBlank(message = "Lastname is required")
+    @Size(max = 100)
     private String lastname;
     @NotBlank(message = "Birthdate is required")
     private String birthDate;
