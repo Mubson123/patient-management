@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +21,11 @@ public class PatientController {
     @GetMapping
     public ResponseEntity<List<PatientResponseDTO>> getAllPatients() {
         return ResponseEntity.ok(patientService.getAllPatients());
+    }
+
+    @GetMapping("/{patientId}")
+    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable UUID patientId) {
+        return ResponseEntity.ok(patientService.getPatientById(patientId));
     }
 
     @PostMapping
