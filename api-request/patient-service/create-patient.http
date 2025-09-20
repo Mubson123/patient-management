@@ -4,11 +4,11 @@ Content-Type: application/json
 
 {
   "gender": "FEMALE",
-  "firstname": "Max",
-  "lastname": "Jackson",
+  "firstname": "Emilie",
+  "lastname": "Kopfsprung",
   "birthDate": "1989-11-03",
   "phone": "+49 911 675342",
-  "email": "jackson.max@example.com",
+  "email": "emilie125ks.max@example.com",
   "street": "Dominion Strasse 4",
   "zipCode": "90874",
   "city": "Nuremberg"

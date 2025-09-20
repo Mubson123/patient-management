@@ -24,13 +24,22 @@ public class PatientController {
     }
 
     @GetMapping("/{patientId}")
-    public ResponseEntity<PatientResponseDTO> getPatientById(@PathVariable UUID patientId) {
+    public ResponseEntity<PatientResponseDTO> getPatientById(
+            @PathVariable UUID patientId) {
         return ResponseEntity.ok(patientService.getPatientById(patientId));
     }
 
     @PostMapping
-    public ResponseEntity<PatientResponseDTO> createPatient(@Valid @RequestBody PatientRequestDTO requestDTO) {
+    public ResponseEntity<PatientResponseDTO> createPatient(
+            @Valid @RequestBody PatientRequestDTO requestDTO) {
         PatientResponseDTO responseDTO = patientService.createPatient(requestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+    }
+
+    @PutMapping(value = "/{patientId}")
+    public ResponseEntity<PatientResponseDTO> updatePatient(
+            @PathVariable UUID patientId, @Valid @RequestBody PatientRequestDTO requestDTO) {
+        PatientResponseDTO responseDTO = patientService.updatePatient(patientId, requestDTO);
+        return ResponseEntity.accepted().body(responseDTO);
     }
 }
