@@ -1,6 +1,6 @@
 ### GET request to get patient by ID
 
-GET http://localhost:4000/patients/223e4567-e89b-12d3-a456-426614174005
+GET http://localhost:4000/patients/620a3980-5c7b-46d0-b53c-099811e11ff4
 
 
 ###
