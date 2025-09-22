@@ -10,6 +10,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -32,7 +34,12 @@ public class Patient {
     private String lastname;
     @NotNull
     private LocalDate birthDate;
-    private String phone;
+    @ElementCollection
+    @CollectionTable(
+            name = "patient_phone",
+            joinColumns = @JoinColumn(name = "patient_id")
+    )
+    private List<PhoneNumber> phoneNumbers = new ArrayList<>();
     @Email
     private String email;
     @Embedded

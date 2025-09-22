@@ -1,91 +1,133 @@
-CREATE TABLE IF NOT EXISTS patient
-(
-    id         UUID PRIMARY KEY,
-    gender     VARCHAR(10)  NOT NULL,   -- MALE | FEMALE | OTHER | UNKNOWN
-    firstname  VARCHAR(100) NOT NULL,
-    lastname   VARCHAR(100) NOT NULL,
-    birth_date DATE         NOT NULL,
-    phone      VARCHAR(30),
-    email      VARCHAR(255) UNIQUE,
-    street     VARCHAR(255) NOT NULL,
-    zip_code   VARCHAR(20)  NOT NULL,
-    city       VARCHAR(100) NOT NULL
-);
+-- PRINCIPAL TABLE
+CREATE TABLE IF NOT EXISTS patient (
+    id                 UUID PRIMARY KEY,
+    registration_date  TIMESTAMP,
+    last_update_date   TIMESTAMP,
+    gender             VARCHAR(10)  NOT NULL,
+    firstname          VARCHAR(100) NOT NULL,
+    lastname           VARCHAR(100) NOT NULL,
+    birth_date         DATE         NOT NULL,
+    email              VARCHAR(255) UNIQUE NOT NULL,
+    street             VARCHAR(255) NOT NULL,
+    zip_code           VARCHAR(20)  NOT NULL,
+    city               VARCHAR(100) NOT NULL
+    );
 
--- Springfield (Nürnberg area)
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '123e4567-e89b-12d3-a456-426614174000','MALE','John','Doe','1985-06-15',
-       '+49 911 1234567','john.doe@example.com','123 Main St','90402','Springfield'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='123e4567-e89b-12d3-a456-426614174000');
+-- PHONE NUMBER TABLE
+CREATE TABLE IF NOT EXISTS patient_phone (
+                                             patient_id   UUID        NOT NULL,
+                                             number       VARCHAR(30) NOT NULL,
+    type         VARCHAR(10) NOT NULL,
+    PRIMARY KEY (patient_id, number),
+    FOREIGN KEY (patient_id) REFERENCES patient(id) ON DELETE CASCADE
+    );
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '123e4567-e89b-12d3-a456-426614174003','MALE','Bob','Brown','1982-11-30',
-       '+49 911 2345678','bob.brown@example.com','321 Pine St','90403','Springfield'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='123e4567-e89b-12d3-a456-426614174003');
+-- === PATIENTS ===
+INSERT INTO patient
+(id, registration_date, last_update_date, gender, firstname, lastname,
+ birth_date, email, street, zip_code, city)
+VALUES
+    ('123e4567-e89b-12d3-a456-426614174000', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'MALE', 'John', 'Doe', '1985-06-15', 'john.doe@example.com',
+     '123 Main St', '90402', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174005','MALE','Michael','Green','1988-07-25',
-       '+49 911 3456789','michael.green@example.com','987 Cedar St','90404','Springfield'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174005');
+    ('123e4567-e89b-12d3-a456-426614174001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'FEMALE', 'Jane', 'Smith', '1990-09-23', 'jane.smith@example.com',
+     '456 Elm St', '90403', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174008','FEMALE','Laura','White','1989-09-02',
-       '+49 911 4567890','laura.white@example.com','789 Palm St','90405','Springfield'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174008');
+    ('123e4567-e89b-12d3-a456-426614174002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'FEMALE', 'Alice', 'Johnson', '1978-03-12', 'alice.johnson@example.com',
+     '789 Oak St', '90404', 'Nürnberg'),
+    ('123e4567-e89b-12d3-a456-426614174003', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'MALE', 'Bob', 'Brown', '1982-11-30', 'bob.brown@example.com',
+     '321 Pine St', '90405', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174011','MALE','Ethan','Martinez','1984-05-03',
-       '+49 911 5678901','ethan.martinez@example.com','987 Redwood St','90406','Springfield'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174011');
+    ('123e4567-e89b-12d3-a456-426614174004', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'FEMALE', 'Emily', 'Davis', '1995-02-05', 'emily.davis@example.com',
+     '654 Maple St', '90406', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174014','FEMALE','Isabella','Walker','1987-10-17',
-       '+49 911 6789012','isabella.walker@example.com','789 Willow St','90407','Springfield'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174014');
+    ('223e4567-e89b-12d3-a456-426614174005', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'MALE', 'Michael', 'Green', '1988-07-25', 'michael.green@example.com',
+     '987 Cedar St', '90407', 'Nürnberg'),
 
--- Shelbyville (Fürth area)
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '123e4567-e89b-12d3-a456-426614174001','FEMALE','Jane','Smith','1990-09-23',
-       '+49 911 7890123','jane.smith@example.com','456 Elm St','90762','Shelbyville'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='123e4567-e89b-12d3-a456-426614174001');
+    ('223e4567-e89b-12d3-a456-426614174006', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'FEMALE', 'Sarah', 'Taylor', '1992-04-18', 'sarah.taylor@example.com',
+     '123 Birch St', '90408', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '123e4567-e89b-12d3-a456-426614174004','FEMALE','Emily','Davis','1995-02-05',
-       '+49 911 8901234','emily.davis@example.com','654 Maple St','90763','Shelbyville'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='123e4567-e89b-12d3-a456-426614174004');
+    ('223e4567-e89b-12d3-a456-426614174007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'MALE', 'David', 'Wilson', '1975-01-11', 'david.wilson@example.com',
+     '456 Ash St', '90409', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174006','FEMALE','Sarah','Taylor','1992-04-18',
-       '+49 911 9012345','sarah.taylor@example.com','123 Birch St','90764','Shelbyville'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174006');
+    ('223e4567-e89b-12d3-a456-426614174008', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'FEMALE', 'Laura', 'White', '1989-09-02', 'laura.white@example.com',
+     '789 Palm St', '90410', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174009','MALE','James','Harris','1993-11-15',
-       '+49 911 0123456','james.harris@example.com','321 Cherry St','90765','Shelbyville'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174009');
+    ('223e4567-e89b-12d3-a456-426614174009', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'MALE', 'James', 'Harris', '1993-11-15', 'james.harris@example.com',
+     '321 Cherry St', '90411', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174012','FEMALE','Sophia','Clark','1991-12-25',
-       '+49 911 1230987','sophia.clark@example.com','123 Hickory St','90766','Shelbyville'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174012');
+    ('223e4567-e89b-12d3-a456-426614174010', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'FEMALE', 'Emma', 'Moore', '1980-08-09', 'emma.moore@example.com',
+     '654 Spruce St', '90412', 'Nürnberg'),
 
--- Capital City (Erlangen area)
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '123e4567-e89b-12d3-a456-426614174002','FEMALE','Alice','Johnson','1978-03-12',
-       '+49 9131 234567','alice.johnson@example.com','789 Oak St','91052','Capital City'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='123e4567-e89b-12d3-a456-426614174002');
+    ('223e4567-e89b-12d3-a456-426614174011', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'MALE', 'Ethan', 'Martinez', '1984-05-03', 'ethan.martinez@example.com',
+     '987 Redwood St', '90413', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174007','MALE','David','Wilson','1975-01-11',
-       '+49 9131 345678','david.wilson@example.com','456 Ash St','91054','Capital City'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174007');
+    ('223e4567-e89b-12d3-a456-426614174012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'FEMALE', 'Sophia', 'Clark', '1991-12-25', 'sophia.clark@example.com',
+     '123 Hickory St', '90414', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174010','FEMALE','Emma','Moore','1980-08-09',
-       '+49 9131 456789','emma.moore@example.com','654 Spruce St','91056','Capital City'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174010');
+    ('223e4567-e89b-12d3-a456-426614174013', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'MALE', 'Daniel', 'Lewis', '1976-06-08', 'daniel.lewis@example.com',
+     '456 Cypress St', '90415', 'Nürnberg'),
 
-INSERT INTO patient (id, gender, firstname, lastname, birth_date, phone, email, street, zip_code, city)
-SELECT '223e4567-e89b-12d3-a456-426614174013','MALE','Daniel','Lewis','1976-06-08',
-       '+49 9131 567890','daniel.lewis@example.com','456 Cypress St','91058','Capital City'
-WHERE NOT EXISTS (SELECT 1 FROM patient WHERE id='223e4567-e89b-12d3-a456-426614174013');
+    ('223e4567-e89b-12d3-a456-426614174014', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,
+     'FEMALE', 'Isabella', 'Walker', '1987-10-17', 'isabella.walker@example.com',
+     '789 Willow St', '90416', 'Nürnberg');
+
+-- === PHONES ===
+INSERT INTO patient_phone (patient_id, number, type) VALUES
+    ('123e4567-e89b-12d3-a456-426614174000', '+49 911 1234567', 'MOBILE'),
+    ('123e4567-e89b-12d3-a456-426614174000', '+49 911 7654321', 'PRIVATE'),
+
+    ('123e4567-e89b-12d3-a456-426614174001', '+49 911 2223344', 'MOBILE'),
+
+    ('123e4567-e89b-12d3-a456-426614174002', '+49 911 3334455', 'MOBILE'),
+    ('123e4567-e89b-12d3-a456-426614174002', '+49 911 5556677', 'OTHER'),
+
+    ('123e4567-e89b-12d3-a456-426614174003', '+49 911 4447788', 'MOBILE'),
+    ('123e4567-e89b-12d3-a456-426614174003', '+49 911 4447799', 'PRIVATE'),
+
+    ('123e4567-e89b-12d3-a456-426614174004', '+49 911 5558899', 'MOBILE'),
+    ('123e4567-e89b-12d3-a456-426614174004', '+49 911 5558800', 'OTHER'),
+
+    ('223e4567-e89b-12d3-a456-426614174005', '+49 911 6669900', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174005', '+49 911 6669911', 'PRIVATE'),
+
+    ('223e4567-e89b-12d3-a456-426614174006', '+49 911 7770011', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174006', '+49 911 7770022', 'OTHER'),
+
+    ('223e4567-e89b-12d3-a456-426614174007', '+49 911 8881122', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174007', '+49 911 8881133', 'PRIVATE'),
+
+    ('223e4567-e89b-12d3-a456-426614174008', '+49 911 9992233', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174008', '+49 911 9992244', 'OTHER'),
+
+    ('223e4567-e89b-12d3-a456-426614174009', '+49 911 1113344', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174009', '+49 911 1113355', 'PRIVATE'),
+
+    ('223e4567-e89b-12d3-a456-426614174010', '+49 911 2224455', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174010', '+49 911 2224466', 'OTHER'),
+
+    ('223e4567-e89b-12d3-a456-426614174011', '+49 911 3335566', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174011', '+49 911 3335577', 'PRIVATE'),
+
+    ('223e4567-e89b-12d3-a456-426614174012', '+49 911 4446677', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174012', '+49 911 4446688', 'OTHER'),
+
+    ('223e4567-e89b-12d3-a456-426614174013', '+49 911 5557788', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174013', '+49 911 5557799', 'PRIVATE'),
+
+    ('223e4567-e89b-12d3-a456-426614174014', '+49 911 6668899', 'MOBILE'),
+    ('223e4567-e89b-12d3-a456-426614174014', '+49 911 6668800', 'OTHER');

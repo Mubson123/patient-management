@@ -24,7 +24,7 @@ public class PatientMapper {
                 .firstname(patient.getFirstname())
                 .lastname(patient.getLastname())
                 .birthDate(patient.getBirthDate().toString())
-                .phone(patient.getPhone())
+                .phoneNumbers(patient.getPhoneNumbers())
                 .email(patient.getEmail())
                 .street(patient.getAddress().getStreet())
                 .zipCode(patient.getAddress().getZipCode())
@@ -49,7 +49,7 @@ public class PatientMapper {
         patient.setFirstname(patientRequestDTO.getFirstname());
         patient.setLastname(patientRequestDTO.getLastname());
         patient.setBirthDate(LocalDate.parse(patientRequestDTO.getBirthDate()));
-        patient.setPhone(patientRequestDTO.getPhone());
+        patient.setPhoneNumbers(patientRequestDTO.getPhoneNumbers());
         patient.setEmail(patientRequestDTO.getEmail());
         patient.setAddress(address);
         return patient;
