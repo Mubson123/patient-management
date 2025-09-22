@@ -1,16 +1,25 @@
 ### PUT request to update an existing patient
-PUT http://localhost:4000/patients/620a3980-5c7b-46d0-b53c-099811e11ff4
+PUT http://localhost:4000/patients/2a1bb162-af81-4194-ae63-eb5530c1b031
 Content-Type: application/json
 
 {
   "gender": "FEMALE",
-  "firstname": "Emilie",
-  "lastname": "Kopfsprung",
+  "firstname": "Vanessa",
+  "lastname": "Bauer",
   "birthDate": "1989-11-03",
-  "phone": "+49 9131 7365376",
-  "email": "emilie125ks.max@example.com",
-  "street": "Haupstr. 80",
-  "zipCode": "91054",
+  "phoneNumbers": [
+    {
+      "number": "+49 9131 8346936",
+      "type": "PRIVATE"
+    },
+    {
+      "number": "+49 173 637477",
+      "type": "MOBILE"
+    }
+  ],
+  "email": "vanessabauer89@test.com",
+  "street": "Goerlitzer Str. 32",
+  "zipCode": "91058",
   "city": "Erlangen"
 }
 

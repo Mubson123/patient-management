@@ -1,5 +1,6 @@
 package com.pm.patientservice.dto;
 
+import com.pm.patientservice.model.PhoneNumber;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,7 +26,7 @@ public class PatientRequestDTO {
     private String lastname;
     @NotBlank(message = "Birthdate is required")
     private String birthDate;
-    private String phone;
+    private List<PhoneNumber> phoneNumbers;
     @Email(message = "Email should be valid")
     private String email;
     @NotBlank(message = "Street is required")

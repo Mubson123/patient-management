@@ -1,8 +1,10 @@
 package com.pm.patientservice.dto;
 
+import com.pm.patientservice.model.PhoneNumber;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,7 +19,7 @@ public class PatientResponseDTO {
     String firstname;
     String lastname;
     String birthDate;
-    String phone;
+    List<PhoneNumber> phoneNumbers;
     String email;
     String street;
     String zipCode;
