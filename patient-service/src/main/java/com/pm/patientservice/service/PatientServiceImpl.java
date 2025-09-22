@@ -2,6 +2,7 @@ package com.pm.patientservice.service;
 
 import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.exception.PatientNotFoundException;
+import com.pm.patientservice.grpc.BillingServiceGrpcClient;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Gender;
 import com.pm.patientservice.model.Patient;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PatientServiceImpl implements PatientService {
 
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
 
@@ -38,11 +40,17 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
-        Patient patient = patientMapper.toEntity(patientRequestDTO);
+        Patient newPatient = patientMapper.toEntity(patientRequestDTO);
         //Set Registration Date only the first time
-        patient.setRegistrationDate(LocalDateTime.now());
-        patientRepository.save(patient);
-        return patientMapper.toDTO(patient);
+        newPatient.setRegistrationDate(LocalDateTime.now());
+        patientRepository.save(newPatient);
+
+        billingServiceGrpcClient.createBillingAccount(
+                newPatient.getId().toString(),
+                newPatient.getFirstname(),
+                newPatient.getLastname(),
+                newPatient.getBirthDate().toString());
+        return patientMapper.toDTO(newPatient);
     }
 
     @Override
