@@ -3,6 +3,7 @@ package com.pm.patientservice.service;
 import com.pm.patientservice.dto.PatientRequestDTO;
 import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.grpc.BillingServiceGrpcClient;
+import com.pm.patientservice.kafka.KafkaProducer;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Gender;
 import com.pm.patientservice.model.Patient;
@@ -24,6 +25,7 @@ public class PatientServiceImpl implements PatientService {
     private final BillingServiceGrpcClient billingServiceGrpcClient;
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
+    private final KafkaProducer kafkaProducer;
 
     @Override
     public List<PatientResponseDTO> getAllPatients() {
@@ -50,6 +52,7 @@ public class PatientServiceImpl implements PatientService {
                 newPatient.getFirstname(),
                 newPatient.getLastname(),
                 newPatient.getBirthDate().toString());
+        kafkaProducer.sendEvent(newPatient);
         return patientMapper.toDTO(newPatient);
     }
 
