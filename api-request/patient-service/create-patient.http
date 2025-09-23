@@ -3,24 +3,20 @@ POST http://localhost:4000/patients
 Content-Type: application/json
 
 {
-  "gender": "FEMALE",
-  "firstname": "Vanessa",
-  "lastname": "Bauer",
-  "birthDate": "1989-11-03",
+  "gender": "MALE",
+  "firstname": "Florian",
+  "lastname": "Cowper",
+  "birthDate": "1994-08-28",
   "phoneNumbers": [
     {
-      "number": "+49 911 834693564",
-      "type": "PRIVATE"
-    },
-    {
-      "number": "+49 173 637477",
+      "number": "+49 152 759406",
       "type": "MOBILE"
     }
   ],
-  "email": "billing.service@test.com",
-  "street": "Dominion Strasse 4",
-  "zipCode": "90874",
-  "city": "Nuremberg"
+  "email": "kafka_test@test.com",
+  "street": "Konrad-Zuse-Str. 19",
+  "zipCode": "99099",
+  "city": "Erfurt"
 }
 
 ###

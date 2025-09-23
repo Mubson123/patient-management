@@ -12,20 +12,21 @@ import patient.events.PatientEvent;
 @RequiredArgsConstructor
 public class KafkaProducer {
 
-    private final KafkaTemplate<String, byte[]> kafkaTemplate;
+  private final KafkaTemplate<String, byte[]> kafkaTemplate;
 
-    public void  sendEvent(Patient patient) {
-        PatientEvent patientEvent = PatientEvent.newBuilder()
-                .setPatientId(patient.getId().toString())
-                .setFirstname(patient.getFirstname())
-                .setLastname(patient.getLastname())
-                .setBirthDate(patient.getBirthDate().toString())
-                .setEventType("PATIENT_CREATED")
-                .build();
-        try{
-            kafkaTemplate.send("patient", patientEvent.toByteArray());
-        } catch (Exception e) {
-            log.error("Error sending PatientCreated event: {}", patientEvent);
-        }
+  public void sendEvent(Patient patient) {
+    PatientEvent patientEvent =
+        PatientEvent.newBuilder()
+            .setPatientId(patient.getId().toString())
+            .setFirstname(patient.getFirstname())
+            .setLastname(patient.getLastname())
+            .setBirthDate(patient.getBirthDate().toString())
+            .setEventType("PATIENT_CREATED")
+            .build();
+    try {
+      kafkaTemplate.send("patient", patientEvent.toByteArray());
+    } catch (Exception e) {
+      log.error("Error sending PatientCreated event: {}", patientEvent);
     }
+  }
 }
