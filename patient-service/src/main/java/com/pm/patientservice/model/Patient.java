@@ -41,6 +41,7 @@ public class Patient {
     )
     private List<PhoneNumber> phoneNumbers = new ArrayList<>();
     @Email
+    @NotNull
     private String email;
     @Embedded
     private Address address;
