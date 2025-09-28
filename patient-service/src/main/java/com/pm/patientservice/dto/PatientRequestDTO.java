@@ -3,6 +3,7 @@ package com.pm.patientservice.dto;
 import com.pm.patientservice.model.PhoneNumber;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class PatientRequestDTO {
     private String birthDate;
     private List<PhoneNumber> phoneNumbers;
     @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required")
     private String email;
     @NotBlank(message = "Street is required")
     private String street;

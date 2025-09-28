@@ -1,47 +1,40 @@
-import io.restassured.RestAssured;
-import org.junit.jupiter.api.BeforeAll;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-class PatientIntegrationTest {
-  static String token = "";
+class PatientIntegrationTest extends Fixture {
 
-  @BeforeAll
-  static void setUp() {
-    RestAssured.baseURI = "http://localhost:4004";
+    @Test
+    void shouldReturnNewPatientWithValidToken() {
+        String patient = Fixture.patient;
 
-    String loginPayload =
-        """
-                      {
-                          "email": "testuser@test.com",
-                          "password": "password123"
-                      }
-                      """;
+        Response response =
+                given()
+                        .contentType("application/json")
+                        .body(patient)
+                        .when()
+                        .post("/api/patients")
+                        .then()
+                        .statusCode(201)
+                        .body("id", notNullValue())
+                        .body("firstname", equalTo("Florian"))
+                        .extract()
+                        .response();
+        id = response.jsonPath().getString("id");
+    }
 
-    token =
+    @Test
+    void shouldReturnPatientsWithValidToken() {
+
         given()
-            .contentType("application/json")
-            .body(loginPayload)
-            .when()
-            .post("/auth/login")
-            .then()
-            .statusCode(200)
-            .extract()
-            .jsonPath()
-            .get("token");
-  }
-
-  @Test
-  void shouldReturnPatientsWithValidToken() {
-
-    given()
-        .header("Authorization", "Bearer " + token)
-        .when()
-        .get("/api/patients")
-        .then()
-        .statusCode(200)
-        .body("patients", notNullValue());
-  }
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/api/patients")
+                .then()
+                .statusCode(200)
+                .body("patients", notNullValue());
+    }
 }

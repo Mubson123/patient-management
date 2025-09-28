@@ -1,6 +1,7 @@
 package com.pm.patientservice.service;
 
 import com.pm.patientservice.dto.PatientRequestDTO;
+import com.pm.patientservice.exception.PatientAlreadyExistsException;
 import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.grpc.BillingServiceGrpcClient;
 import com.pm.patientservice.kafka.KafkaProducer;
@@ -42,18 +43,19 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO) {
+        String email = patientRequestDTO.getEmail();
+        boolean patientExists = patientRepository.existsByEmail(email);
+        if (patientExists) {
+            throw new PatientAlreadyExistsException(String.format("Patient with E-Mail %s already exists", email));
+        }
         Patient newPatient = patientMapper.toEntity(patientRequestDTO);
-        //Set Registration Date only the first time
         newPatient.setRegistrationDate(LocalDateTime.now());
-        patientRepository.save(newPatient);
+        Patient savedPatient = patientRepository.save(newPatient);
 
-        billingServiceGrpcClient.createBillingAccount(
-                newPatient.getId().toString(),
-                newPatient.getFirstname(),
-                newPatient.getLastname(),
-                newPatient.getBirthDate().toString());
-        kafkaProducer.sendEvent(newPatient);
-        return patientMapper.toDTO(newPatient);
+        billingServiceGrpcClient.createBillingAccount(savedPatient.getId().toString(), savedPatient.getFirstname(),
+                savedPatient.getLastname(), savedPatient.getBirthDate().toString());
+        kafkaProducer.sendEvent(savedPatient);
+        return patientMapper.toDTO(savedPatient);
     }
 
     @Override

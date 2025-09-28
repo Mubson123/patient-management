@@ -15,8 +15,7 @@ import org.springframework.stereotype.Service;
 public class BillingServiceGrpcClient {
     private final BillingServiceBlockingStub blockingStub;
 
-    // localhost:9001/billingService/createBillingAccount
-    // aws.grpc:12345/billingService/createBillingAccount
+
     public BillingServiceGrpcClient(
             @Value("${billing.service.address:localhost}") String serverAddress,
             @Value("${billing.service.port:9001}") int serverPort) {
@@ -30,7 +29,7 @@ public class BillingServiceGrpcClient {
         blockingStub = BillingServiceGrpc.newBlockingStub(channel);
     }
 
-    public BillingResponse createBillingAccount(String patientId, String firstname, String lastname, String birthDate) {
+    public void createBillingAccount(String patientId, String firstname, String lastname, String birthDate) {
         BillingRequest request = BillingRequest.newBuilder()
                 .setPatientId(patientId)
                 .setFirstname(firstname)
@@ -40,6 +39,5 @@ public class BillingServiceGrpcClient {
 
         BillingResponse response = blockingStub.createBillingAccount(request);
         log.info("Received response from Billing Service via GRPC: {}", response.toString());
-        return response;
     }
 }
