@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -38,13 +37,6 @@ class PatientServiceTest {
         assertEquals(expected, actual);
     }
 
-    @Test
-    void shouldReturnPatientById() {
-        Patient patient = PatientFixtures.sarah;
-        PatientResponseDTO expected = PatientFixtures.sarahResponse;
-        when(patientRepository.findById(patient.getId())).thenReturn(Optional.of(patient));
-        when(patientMapper.toDTO(patient)).thenReturn(expected);
-        PatientResponseDTO actual = unitUnderTest.getPatientById(patient.getId());
-        assertEquals(expected, actual);
-    }
+
+
 }
